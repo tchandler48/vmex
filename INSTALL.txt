@@ -1,0 +1,54 @@
+
+
+Installation
+
+	The VMEX system has been developed using VM370 Sixpack 1.3 Beta 3.
+	It may work on other VM releases or may not.
+
+	To install the VMEX (VM SPREADSHEET) on your running VM370 CMS
+	sysem, follow the steps listed below.
+
+	1.	The following source code must be uploaded to the
+		distribution that you are using (See Systems Tested)
+		and Userid that your are loading under.
+			vmex.c		
+			clr3270.assemble
+                     TVMEX.exec
+
+	
+Sytems Tested
+
+	The following VM370 distribuion have been used to test VMEX.  Any
+	system not listed, MAY work, but I have not tested via them.
+	I have only tested under the user that is listed in the
+	system description.  Other user id's on the system MAY OR MAY NOT
+	work.
+
+
+	1.  VM 370 6Pack Extended by Prof. Ferland at:
+           	https://geronimo370.nl/vm6pext/vm-370/
+
+           Tested under Userid:
+		GCCCMS
+			Runs without any changes.
+
+		CMSUSER  ** NOTE **
+			You must do the following to make VMEX run under
+			the CMSUSER ID.
+			Logon on to CMSUSER and wait until CMS is running.
+			Then type:
+				CP DEF STOR 15M
+			The system will respond with a message about storage	
+			size and respond with a CP message. 
+			Then type:
+				IPL CMS
+			After CMS is running,
+			Type:
+				GLOBAL TXTLIB PDPCLIB
+
+			The system is now ready applications.
+
+
+
+
+	2.  Other VM370 platforms MAY or MAY NOT work.

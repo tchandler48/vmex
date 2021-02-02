@@ -1,0 +1,175 @@
+
+
+				USER MANUAL FOR VMEX
+
+
+General Information
+
+	VMEX is a very simple spreadsheet program.  It is based on some
+	very simple code I found.  I have added numerous improvements,
+	a complete math parser, saving workspaces and loading workspaces.
+	
+	Afer every cell entry, the spreadsheet is recomputes ALL cells.
+	
+       The maximum size of the spreadsheet is 99(rows) and 26(columns). 
+       Rows should be labeled with numbers, starting from 1 to 99, and 
+       columns should be labeled with letters, starting from A to Z. 
+       Cells should be referenced by a letter number and row number,
+       with no space or symbol between; for example, E9, B88. Lowercase 
+       and uppercase letters to reference cells are allowed and will
+       be recognized.
+
+	VMEX using both integer and double (floating) numbers.  They can
+	be intermixed.  The ouput from functions is always in double 
+	format.
+
+ 	
+
+Commands
+
+	The following are commands that VMEX will accept.  All commands
+ 	must start with an "*" and can be upper or lower case.
+
+  		*BOT
+				Positions the spreadsheet to the bottom row.
+				Does NOT change the column value;
+
+		*CELLS
+				This is the default view for the VMEX program.
+				Cells may be updated on this view.  After each
+				input, the COMPLETE workspace is recomputed.
+				You may navigate to other views or move the 
+				current view around based what command is entered.
+	
+		*CLEAR
+				This command clears the current workspace.
+				All data is LOST. You must *SAVE the current
+				workspace before the *CLEAR or any changes
+				made from the last *LOAD will be lost.
+
+		*DOWN
+				Moves the current view by 15 rows.
+
+		*EXIT		Exit the VMEX spreadsheet.  All data will
+				NOT be saved.
+
+		*HOME		Returns the view port to the stating location.
+				row = 0, column = 1  (Default Home position).
+
+		*LEFT
+				Moves the current view LEFT 4 columns.
+
+		*LOAD
+				Prompts for the workspace to be loaded.
+
+		*MATH
+				Displays the current math values by cell.
+
+		*PROG
+				This command displays the program code for 
+				the current workspace.  All the functions,
+				math variables, and text variables are
+				displayed in the cells.
+
+		*RIGHT
+				Move the current view RIGHT 4 columns.
+
+		*SAVE
+				Prompts for the name of the file to store
+				the current workspace.
+
+		*TOP
+				Return to view to row 0,the top of sheet.
+				The column value is NOT changed.  You must
+				use *LEFT or *RIGHT to shift the view over.
+
+		*UP
+				Moves the current view UP 15 rows.
+
+ 		*VIEW		Sets the view port to be displayed on the
+				screen. You will be prompted for the ROW
+				and then the COL entry.
+
+				ROW can be 0 to 99.
+				COL must start with 1 and can be up to 26.
+
+		
+Math Processing
+
+	A math parser written by Dr. Jack Crenshaw has been integrated
+	into VMEX.  Operations supported are +, -, *, and /.
+
+
+Built-in Functions
+
+	You can include functions in the spreadsheet. Functions are of the 
+	form =AVG(A2,A5), =SUM(C1,C15).  Functions MUST start with 
+	the = (equal) character. 
+
+	AVG
+		AVG will return the average value from the cells inside
+ 		the (...).
+		Ex:	=AVG(B1,C1);
+
+       DATE
+		DATE will display in the cell, the current date.  This 
+		cell CAN NOT be used in any math activity. If you need
+		math ability, then use MTH, DAY or YR.
+		Ex:	=DATE
+			01/20/2021
+
+	DAY 
+		Will return the current day as an integer.
+		Ex:	=DAY
+
+	HOUR
+		Will return the current hour as an integer.
+
+	MIN
+		Will return the current minute as an integer.
+
+	MTH
+		Will return the current month as an integer.
+		Ex:	=YR
+
+	RNG
+		RNG will return the difference between the largest
+		and smallest value in the input.
+		Ex:     =RNG(C1,C3)
+
+	SEC
+		Will return the current second as an integer.
+
+	SQRT	
+		Will return the square root of a cell.  The cell to
+		be used MUST be entered as a double (Ex: 4.0, 9.0, 15.33)
+		Ex:	B5  set value 9.0
+ 			=SQRT(B5)
+			Value returned is 3.0
+
+	SUM
+		SUM will return the cumulative total. The input must be a 
+		horizontal or vertical 1D range of cells, described by the 
+		end points. The formula will compute a result using only 
+		values within the given range of cells; it should ignore empty 
+		cells and those containing text or another formula. If there 
+		are no values within the given range of cells, the result 
+		should default to zero.
+		Ex:	=SUM(C1,C3)
+
+	TIME
+		Will return the current time in a string.
+		Ex:	=TIME
+			15:33:34
+
+	YR
+		Will return the current year as an integer.
+		Ex:	=YR
+
+
+
+
+
+
+
+
