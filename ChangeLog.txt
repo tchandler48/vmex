@@ -1,0 +1,9 @@
+
+
+Change Log for VMEX
+	NOTE:  Code cleanup and comments to code are NOT Listed.
+
+
+
+02/02/2021	Initial Code published.
+
