@@ -138,6 +138,13 @@ Built-in Functions
 		Will return the current month as an integer.
 		Ex:	=YR
 
+	POW
+		Raises a number to the indicate power.
+		Ex: 	=POW(a8,2)
+			a8 = 5
+			This raises a8 (5) to the 2nd power
+			giviing the result of 25.
+
 	RNG
 		RNG will return the difference between the largest
 		and smallest value in the input.

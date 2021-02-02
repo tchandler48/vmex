@@ -107,6 +107,7 @@ USERID CMSUSER
       void Right_pr(void);
       void Print_pr(void);
     double asc_2_dbl(void);
+      void Pow_dsp(void);
  
 
     int main(int argc, char *argv[])
@@ -525,6 +526,11 @@ skip_save:
                if(p)
                   pgm_byte = 12; 
 
+               p = strstr(input, "POW");
+               if(p)
+                  pgm_byte = 13; 
+
+
                switch(pgm_byte)
                {   
                   case 1:             /* SUM */
@@ -575,6 +581,10 @@ skip_save:
                     Sqrt_pr();
                     break;
 
+                  case 13:             /* POW  */
+                    Pow_dsp();
+                    break;
+
                }
              }
           }
@@ -616,7 +626,6 @@ double Expression()
    z1 = 0;
    z4 = 0;
  
-printf("EXP #00 input = %s\n",input);
    ch = input[pi];
    if(ch != '=')
    {
@@ -631,7 +640,6 @@ printf("EXP #00 input = %s\n",input);
    }
    pi++; 
    ch = input[pi];		/* got cell for math */
-printf("EXP ch = %c\n",ch);
    varname[0] = ch;
    varname[1] = '\0';
    epos = pi;
@@ -725,7 +733,7 @@ double Factor()
    pi = epos; 
    ch = input[pi];
 
-printf("\nFACTOR #1 ch = %c pi = %d input = %s\n",ch,pi,input);
+/* printf("\nFACTOR #1 ch = %c pi = %d input = %s\n",ch,pi,input); */
 
    if(ch == '(')
    {
@@ -737,7 +745,6 @@ printf("\nFACTOR #1 ch = %c pi = %d input = %s\n",ch,pi,input);
    {
      if(isalpha(ch))			
      {
-printf("FACTOR INSIDE isalpha\n");
         z2 = 0;
         z1 = 0;
         ch = input[pi];
@@ -772,7 +779,7 @@ printf("FACTOR INSIDE isalpha\n");
            ch = input[pi];
         }
         wk_row[z2] = '\0';
-printf("FACTOR #5 zi = %d 2 = %d z3 = %d ch = %c\n",pi,z2,z3,ch);
+/* printf("FACTOR #5 zi = %d 2 = %d z3 = %d ch = %c\n",pi,z2,z3,ch); */
 
         z3++;
         z3++;
@@ -844,7 +851,6 @@ printf("FACTOR #5 zi = %d 2 = %d z3 = %d ch = %c\n",pi,z2,z3,ch);
      }
      else				
      {
-printf("INSIDE GETNUM\n");
          value = GetNum(); 
      }
   }
@@ -860,14 +866,12 @@ double GetNum()
 
    pi = epos;
    ch = input[pi];
-printf("GETNUM pi = %d ch = %c\n",pi,ch);
    if((!isdigit(ch)) && (ch != '.'))
    {
      /*strcpy(t_holder, "Numeric Value"); */
      
    }
    value = asc_2_dbl();
-printf("GETNUM value = %f\n",value);
 /*
    pi = e_pos;
    ch = p_string[pi];
@@ -2637,20 +2641,24 @@ void Up_proc()
     rct = rct - 15;
 }
 
+
 void Down_pr()
 {
    rct = rct + 15;
 }
+
 
 void Left_pr()
 {
    cct = cct - 4;
 }
 
+
 void Right_pr()
 {
    cct = cct + 4;
 }
+
 
 void Print_pr()
 {
@@ -2667,7 +2675,7 @@ void Print_pr()
 
    x = strlen(input);
    
-printf("print_pr x = %d input = %s\n",x, input);
+/* printf("print_pr x = %d input = %s\n",x, input); */
    z1 = 0;
    z4 = 0;
    z2 = 0;
@@ -2689,7 +2697,7 @@ printf("print_pr x = %d input = %s\n",x, input);
 
    x = strlen(wk_row);
 
-printf("wk_row = %s x = %d\n",wk_row,x);
+/* printf("wk_row = %s x = %d\n",wk_row,x); */
 
    if(x == 2)
    {
@@ -2737,7 +2745,7 @@ printf("wk_row = %s x = %d\n",wk_row,x);
              st_row = i1;
           }
       }
-printf("st_col = %d st_row = %d\n",st_col,st_row);
+/* printf("st_col = %d st_row = %d\n",st_col,st_row); */
 
       printf("Enter Ending Cell -> \n");
       scanf("%s",input);
@@ -2763,7 +2771,7 @@ printf("st_col = %d st_row = %d\n",st_col,st_row);
 
    x = strlen(wk_row);
 
-printf("wk_row = %s x = %d\n",wk_row,x);
+/* printf("wk_row = %s x = %d\n",wk_row,x); */
 
  
       x = strlen(wk_row);
@@ -2812,7 +2820,7 @@ printf("wk_row = %s x = %d\n",wk_row,x);
       }
  
 
-printf("end_col = %d end_row = %d\n",end_col, end_row);
+/* printf("end_col = %d end_row = %d\n",end_col, end_row); */
 
    fp = fopen("PRINTER", "w");
 
@@ -2842,8 +2850,106 @@ printf("end_col = %d end_row = %d\n",end_col, end_row);
         printf("\n\n");
 */
 
+}
 
 
+void Pow_dsp()
+{
+   double xx;
 
+   z3 = 0;
+   sub = strstr(input,"(");
+   if(sub == NULL)
+   {
+      printf("POW Input Error!\n");
+   }
+   else 
+   {
+      z1 = 0;
+      z2 = 0;
+      ch = input[z1];
+      while(ch != '(')
+      {
+         z1++;
+         ch = input[z1];
+      }
+      z1++;
+      ch = input[z1];
+      while(ch != ',')
+      {
+         wk_row[z2] = ch;
+         z1++;
+         z2++;
+         ch = input[z1];
+      }
+      wk_row[z2] = '\0';
+      z3 = z1;
 
+      x = strlen(wk_row);
+      if(x == 2)
+      {
+         if((wk_row[0] >= 'A') && (wk_row[0] <= 'Z'))
+         {      
+                z2 = 0;
+                z4 = 1;
+                
+                for(z4 = 1; z4 <= 26; z4++)
+                {
+                   if(wk_row[0] == sheet[z2][z4][0])
+                   {
+                      j1 = z4;
+                      break;
+                   }
+                }
+              i1 = wk_row[1] - '1'+1;  /* now have row number */
+          }
+      }
+
+      if(x == 3)
+      {
+             ch = wk_row[0];
+
+             if((ch >= 'A') && (ch <= 'Z'))
+             {
+                z2 = 0;
+                z4 = 1;
+                for(z4 = 1; z4 <= 26; z4++)
+                {
+                   if(ch == sheet[z2][z4][0])
+                   {
+                      j1 = z4;
+                      break;
+                   }
+                }
+
+             wk_row[0] = wk_row[1];
+             wk_row[1] = wk_row[2];
+             wk_row[2] = '\0';
+             i1 = atoi(wk_row);        /* now have row number */
+          }
+      }
+      value = spreadsheet[i1][j1];
+
+      z2 = 0;
+      z1++;
+      ch = input[z1];
+      while(ch != ')')
+      {
+         wk_row[z2] = ch;
+         z1++;
+	  z2++;
+         ch = input[z1];
+      }
+      wk_row[z2] = '\0';
+      xx = atof(wk_row);
+
+      sum = pow(value,xx);
+      spreadsheet[i9][jj] = sum;
+                     
+      sprintf(sheet[i9][jj],"%.2f",sum);
+      if(strlen(sheet[i9][jj]) > 12)
+      {
+         sheet[i9][jj][12] = '\0';
+      }
+   }
 }
