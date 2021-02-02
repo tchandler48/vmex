@@ -1,4 +1,4 @@
-USERID GCCCMS
+USERID CMSUSER
     #include <stdio.h>
     #include <stdlib.h>
     #include <limits.h>
@@ -77,6 +77,7 @@ USERID GCCCMS
        int Is_White(char);
       void SkipWhite(void);
       void _GetChar(void);
+    double GetNum(void);
       void Save_wsp(void);
       void Load_wsp(void);
       void Prog_dsp(void);
@@ -104,7 +105,9 @@ USERID GCCCMS
       void Down_pr(void);
       void Left_pr(void);
       void Right_pr(void);
-
+      void Print_pr(void);
+    double asc_2_dbl(void);
+ 
 
     int main(int argc, char *argv[])
     {
@@ -193,6 +196,7 @@ start1:
           else if(strcmp(cellnum, "*DOWN") == 0)     cmd_byte=14;
           else if(strcmp(cellnum, "*LEFT") == 0)     cmd_byte=15;
           else if(strcmp(cellnum, "*RIGHT") == 0)    cmd_byte=16;
+          else if(strcmp(cellnum, "*PRINT") == 0)    cmd_byte=17;
 
           switch(cmd_byte)
           {   
@@ -278,6 +282,12 @@ start1:
                Right_pr();
                goto skip_save;
                break;
+
+             case 17:             /* *PRINT */
+               Print_pr();
+               goto skip_save;
+               break;
+
           }
 
           x = strlen(cellnum);
@@ -342,6 +352,7 @@ start1:
 
           x = strlen(input);
           input[x-1] = '\0';
+printf("input = %s\n",input);
 
           /*  load source (program) */
           strcpy(src[row][col], input);
@@ -605,7 +616,14 @@ double Expression()
    z1 = 0;
    z4 = 0;
  
+printf("EXP #00 input = %s\n",input);
    ch = input[pi];
+   if(ch != '=')
+   {
+      Value = 0;
+      return;
+   }
+
    while(ch != '=')
    {
       pi++;
@@ -613,6 +631,7 @@ double Expression()
    }
    pi++; 
    ch = input[pi];		/* got cell for math */
+printf("EXP ch = %c\n",ch);
    varname[0] = ch;
    varname[1] = '\0';
    epos = pi;
@@ -706,7 +725,7 @@ double Factor()
    pi = epos; 
    ch = input[pi];
 
-/* printf("\nFACTOR #1 ch = %c pi = %d input = %s\n",ch,pi,input); */
+printf("\nFACTOR #1 ch = %c pi = %d input = %s\n",ch,pi,input);
 
    if(ch == '(')
    {
@@ -718,6 +737,7 @@ double Factor()
    {
      if(isalpha(ch))			
      {
+printf("FACTOR INSIDE isalpha\n");
         z2 = 0;
         z1 = 0;
         ch = input[pi];
@@ -752,7 +772,7 @@ double Factor()
            ch = input[pi];
         }
         wk_row[z2] = '\0';
-/* printf("FACTOR #5 zi = %d 2 = %d z3 = %d ch = %c\n",pi,z2,z3,ch); */
+printf("FACTOR #5 zi = %d 2 = %d z3 = %d ch = %c\n",pi,z2,z3,ch);
 
         z3++;
         z3++;
@@ -824,12 +844,68 @@ double Factor()
      }
      else				
      {
-         /* value = GetNum(); */
+printf("INSIDE GETNUM\n");
+         value = GetNum(); 
      }
   }
   return value;
 }
 
+
+double GetNum()			
+{   
+   char ch;
+   int pi;
+   double value=0;
+
+   pi = epos;
+   ch = input[pi];
+printf("GETNUM pi = %d ch = %c\n",pi,ch);
+   if((!isdigit(ch)) && (ch != '.'))
+   {
+     /*strcpy(t_holder, "Numeric Value"); */
+     
+   }
+   value = asc_2_dbl();
+printf("GETNUM value = %f\n",value);
+/*
+   pi = e_pos;
+   ch = p_string[pi];
+   if(isdigit(ch))
+   {
+     while(isdigit(ch))
+     {
+       pi++;
+       ch = p_string[pi];
+     }
+     e_pos = pi;
+  }
+  SkipWhite();
+*/
+  return value;
+}
+
+
+double asc_2_dbl()
+{   
+   char ch, cvalue[33];
+   int pi, vi_pos=0;
+   double fvalue;
+
+   pi = epos;
+   ch = input[pi];
+   while((isdigit(ch)) || (ch == '.') && (vi_pos <= 32))
+   {
+     cvalue[vi_pos] = ch;
+     pi++;
+     vi_pos++;
+     ch = input[pi];
+   }
+   cvalue[vi_pos] = '\0';
+   fvalue = atof(cvalue);                 
+   epos = pi;
+   return fvalue;
+}
 
 
 int IsAddop(char ch) 		
@@ -1515,7 +1591,7 @@ void Prog_dsp()
 {
    int i, j;
 
-   clr3270();
+   /* clr3270(); */
    printf("\n");  
  
    Get_date();
@@ -1546,7 +1622,7 @@ void Prog_dsp()
       if(i > 9)
         printf("%d",i);
         for(j = cct; j <= 4+cct; j++)
-          printf("%18s",sheet[i][j]);
+          printf("%18s",src[i][j]);
           printf("\n");
    }
 
@@ -1656,7 +1732,7 @@ void Math_dsp()
 
 void Cell_dsp()
 {
-        clr3270(); 
+        /* clr3270(); */ 
               
         Get_date();
         Get_time();
@@ -2576,4 +2652,198 @@ void Right_pr()
    cct = cct + 4;
 }
 
+void Print_pr()
+{
+   int st_row;
+   int end_row;
 
+   int st_col;
+   int end_col;
+
+   sum = 0;
+
+   printf("Enter Starting Cell -> \n");
+   scanf("%s",input);
+
+   x = strlen(input);
+   
+printf("print_pr x = %d input = %s\n",x, input);
+   z1 = 0;
+   z4 = 0;
+   z2 = 0;
+   
+   if(x == 2)
+   {
+      wk_row[0] = input[0];
+      wk_row[1] = input[1];
+      wk_row[2] = '\0';
+   }
+
+   if(x == 3)
+   {
+      wk_row[0] = input[0];
+      wk_row[1] = input[1];
+      wk_row[2] = input[2];
+      wk_row[3] = '\0';
+   }
+
+   x = strlen(wk_row);
+
+printf("wk_row = %s x = %d\n",wk_row,x);
+
+   if(x == 2)
+   {
+      if((wk_row[0] >= 'A') && (wk_row[0] <= 'Z'))
+      {      
+         z2 = 0;
+         z4 = 1;
+                
+         for(z4 = 1; z4 <= 26; z4++)
+         {
+            if(wk_row[0] == sheet[z2][z4][0])
+            {
+               j1 = z4;
+               st_col = z4;
+               break;
+            }
+         }
+         i1 = wk_row[1] - '1'+1;  /* now have row number */
+         st_row = i1;
+      }
+   }
+
+   if(x == 3)
+   {
+             ch = wk_row[0];
+
+             if((ch >= 'A') && (ch <= 'Z'))
+             {
+                z2 = 0;
+                z4 = 1;
+                for(z4 = 1; z4 <= 26; z4++)
+                {
+                   if(ch == sheet[z2][z4][0])
+                   {
+                      j1 = z4;
+                      st_col = z4;
+                      break;
+                   }
+                }
+
+             wk_row[0] = wk_row[1];
+             wk_row[1] = wk_row[2];
+             wk_row[2] = '\0';
+             i1 = atoi(wk_row);        /* now have row number */
+             st_row = i1;
+          }
+      }
+printf("st_col = %d st_row = %d\n",st_col,st_row);
+
+      printf("Enter Ending Cell -> \n");
+      scanf("%s",input);
+
+   z1 = 0;
+   z4 = 0;
+   z2 = 0;
+   
+   if(x == 2)
+   {
+      wk_row[0] = input[0];
+      wk_row[1] = input[1];
+      wk_row[2] = '\0';
+   }
+
+   if(x == 3)
+   {
+      wk_row[0] = input[0];
+      wk_row[1] = input[1];
+      wk_row[2] = input[2];
+      wk_row[3] = '\0';
+   }
+
+   x = strlen(wk_row);
+
+printf("wk_row = %s x = %d\n",wk_row,x);
+
+ 
+      x = strlen(wk_row);
+      if(x == 2)
+      {
+         if((wk_row[0] >= 'A') && (wk_row[0] <= 'Z'))
+         {      
+                z2 = 0;
+                z4 = 1;
+                for(z4 = 1; z4 <= 26; z4++)
+                {
+                   if(wk_row[0] == sheet[z2][z4][0])
+                   {
+                      j2 = z4;
+                      end_col = z4;
+                      break;
+                   }
+                }
+              i2 = wk_row[1] - '1'+1; 
+              end_row = i2; 
+          }
+      }
+
+      if(x == 3)
+      {
+             if((wk_row[0] >= 'A') && (wk_row[0] <= 'Z'))
+             {
+                z2 = 0;
+                z4 = 1;
+                for(z4 = 1; z4 <= 26; z4++)
+                {
+                   if(wk_row[0] == sheet[z2][z4][0])
+                   {
+                      j2 = z4;
+                      end_col = z4;
+                      break;
+                   }
+                }
+
+             wk_row[0] = wk_row[1];
+             wk_row[1] = wk_row[2];
+             wk_row[2] = '\0';
+             i2 = atoi(wk_row);  
+             end_row = i2;     
+          }
+      }
+ 
+
+printf("end_col = %d end_row = %d\n",end_col, end_row);
+
+   fp = fopen("PRINTER", "w");
+
+/*
+   fprintf(fp, "%s","This is a test\n");
+   fprintf(fp, "%s","LINE TWO\n");
+  
+   i = 0;
+   for(j = cct; j <= cct+4; j++)
+   {
+      fprintf(fp,"%18s",sheet[i][j]);
+   }
+   fprintf(fp, "\n\n");
+
+ fprintf(fp, "%s %s %s %d", "We", "are", "in", 2012);
+
+*/
+
+   fclose(fp);
+
+/*
+        i = 0;
+        for(j = cct; j <= cct+4; j++)
+        {
+            printf("%18s",sheet[i][j]);
+        }
+        printf("\n\n");
+*/
+
+
+
+
+
+}

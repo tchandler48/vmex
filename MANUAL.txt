@@ -99,6 +99,12 @@ Math Processing
 	A math parser written by Dr. Jack Crenshaw has been integrated
 	into VMEX.  Operations supported are +, -, *, and /.
 
+	Mixed mode is supported.
+  		=a1+b1 ...etc
+  	or
+		=6+9  or =6+a1  or =b2+7
+
+
 
 Built-in Functions
 
